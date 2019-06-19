@@ -1,0 +1,44 @@
+{
+    "name": "someblackmagic/yii2-satoshi",
+    "version": "v1.0.2",
+    "license": "GNU",
+    "description": "satoshi lib",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Andru Cherny"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">7",
+        "ext-bcmath": "*",
+        "brick/math": "^0.7.0",
+        "yiisoft/yii2": "^2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "8.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SomeBlackMagic\\Satoshi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SomeBlackMagic\\Satoshi\\Tests\\Unit\\": "tests/unit"
+        }
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

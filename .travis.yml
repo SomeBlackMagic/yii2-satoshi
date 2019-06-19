@@ -1,0 +1,24 @@
+language: php
+
+matrix:
+  include:
+    - php: 7.1
+    - php: 7.2
+    - php: 7.3
+  fast_finish: true
+
+
+env:
+  global:
+    TEST_CONFIG="phpunit.xml.dist"
+
+install:
+  - travis_retry composer self-update
+  - composer install
+
+script:
+  - vendor/bin/phpunit --configuration $TEST_CONFIG
+  - git log $(git describe --abbrev=0 --tags)...HEAD --no-merges --pretty=format:"* [%h](http://github.com/${TRAVIS_REPO_SLUG}/commit/%H) %s (%cN)"
+
+after_success:
+  - travis_retry php ./vendor/bin/php-coveralls -v --config .coveralls.yml -v;
