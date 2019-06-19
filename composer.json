@@ -1,6 +1,6 @@
 {
     "name": "someblackmagic/yii2-satoshi",
-    "version": "v1.0.2",
+    "version": "v1.0",
     "license": "GNU",
     "description": "satoshi lib",
     "type": "library",
