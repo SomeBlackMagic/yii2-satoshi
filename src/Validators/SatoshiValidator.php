@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace SomeBlackMagic\Satoshi\Validators;
 
 use SomeBlackMagic\Satoshi\Satoshi;
+use Yii;
 use yii\base\Model;
 use yii\validators\Validator;
-use Yii;
 
 /**
  * Class SatoshiValidator

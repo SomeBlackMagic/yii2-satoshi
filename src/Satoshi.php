@@ -13,13 +13,14 @@ class Satoshi
 
     /**
      * Satoshi constructor.
+     *
      * @param int $satoshi
      */
     public function __construct(int $satoshi)
     {
         $this->satoshi = $satoshi;
     }
-    
+
     /**
      * @return string
      */
@@ -35,7 +36,7 @@ class Satoshi
     {
         return $this->satoshi;
     }
-    
+
     /**
      * @return string
      */

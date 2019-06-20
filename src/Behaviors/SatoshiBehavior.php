@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace SomeBlackMagic\Satoshi\Behaviors;
 
-use SomeBlackMagic\Satoshi\Satoshi;
 use Brick\Math\BigNumber;
 use Brick\Math\Exception\NumberFormatException;
 use Brick\Math\Exception\RoundingNecessaryException;
+use SomeBlackMagic\Satoshi\Satoshi;
 use yii\base\Behavior;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
+use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
 
 /**
@@ -17,59 +18,61 @@ use yii\db\BaseActiveRecord;
  */
 class SatoshiBehavior extends Behavior
 {
-    
+    /**
+     * @var ActiveRecord|null the owner of this behavior
+     */
+    public $owner;
+
     /**
      * @var array
      */
     public $fields = [];
-    
+
     /**
      * @return array
      */
-    public function events()
+    public function events(): array
     {
         return [
             BaseActiveRecord::EVENT_BEFORE_INSERT => 'objectConverter',
-            BaseActiveRecord::EVENT_AFTER_INSERT => 'objectMapper',
-    
+            BaseActiveRecord::EVENT_AFTER_INSERT  => 'objectMapper',
+
             BaseActiveRecord::EVENT_BEFORE_UPDATE => 'objectConverter',
-            BaseActiveRecord::EVENT_AFTER_UPDATE => 'objectMapper',
-    
+            BaseActiveRecord::EVENT_AFTER_UPDATE  => 'objectMapper',
+
             BaseActiveRecord::EVENT_AFTER_FIND => 'objectMapper',
-    
-            // can make problems
-            BaseActiveRecord::EVENT_INIT => 'objectMapper',
+
         ];
     }
-    
+
     /**
      *
      */
     public function objectMapper(): void
     {
         foreach ($this->owner->attributes as $attributeName => $value) {
-            if (in_array($attributeName, $this->fields)) {
+            if (in_array($attributeName, $this->fields, true)) {
                 try {
                     $integerValue = BigNumber::of($value)->toInt();
                     $this->owner->{$attributeName} = new Satoshi($integerValue);
                 } catch (RoundingNecessaryException $e) {
-                    throw new InvalidParamException('Attribute ' . $attributeName . ' value must be integer.');
+                    throw new InvalidArgumentException('Attribute ' . $attributeName . ' value must be integer.');
                 } catch (NumberFormatException $e) {
-                    if ($value != null) {
-                        throw new InvalidParamException('Attribute ' . $attributeName . ' value must be integer or null.');
+                    if ($value !== null) {
+                        throw new InvalidArgumentException('Attribute ' . $attributeName . ' value must be integer or null.');
                     }
                 }
             }
         }
     }
-    
+
     /**
      *
      */
     public function objectConverter(): void
     {
         foreach ($this->owner->attributes as $attributeName => $value) {
-            if (in_array($attributeName, $this->fields)) {
+            if (in_array($attributeName, $this->fields, true)) {
                 $this->parseValue($attributeName, $value);
             }
         }
@@ -79,15 +82,13 @@ class SatoshiBehavior extends Behavior
      * @param $attributeName
      * @param $value
      */
-    private function parseValue($attributeName, $value)
+    private function parseValue($attributeName, $value): void
     {
         if ($value instanceof Satoshi) {
-            /** @var \SomeBlackMagic\Satoshi\Satoshi $value */
+            /** @var Satoshi $value */
             $this->owner->{$attributeName} = $value->toInteger();
-        } else {
-            if ($value !== null) {
-                throw new InvalidParamException('Attribute ' . $attributeName . ' must be Satoshi or null.');
-            }
+        } elseif ($value !== null) {
+            throw new InvalidArgumentException('Attribute ' . $attributeName . ' must be Satoshi or null.');
         }
     }
 }

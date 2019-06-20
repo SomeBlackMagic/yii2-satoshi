@@ -16,6 +16,7 @@ class SatoshiMath extends SatoshiConverter
     /**
      * @param Satoshi $satoshi
      * @param string $percent
+     *
      * @return Satoshi
      */
     public static function percent(Satoshi $satoshi, string $percent): Satoshi
@@ -35,11 +36,12 @@ class SatoshiMath extends SatoshiConverter
     /**
      * @param Satoshi $x
      * @param Satoshi $y
+     *
      * @return Satoshi
      */
     public static function add(Satoshi $x, Satoshi $y): Satoshi
     {
-        $result =  BigInteger::of($x->toInteger())
+        $result = BigInteger::of($x->toInteger())
             ->plus($y->toInteger())
             ->toScale(self::SCALE)
             ->toInt();
@@ -50,32 +52,33 @@ class SatoshiMath extends SatoshiConverter
     /**
      * @param Satoshi $x
      * @param Satoshi $y
+     *
      * @return Satoshi
      */
     public static function sub(Satoshi $x, Satoshi $y): Satoshi
     {
-        $result =  BigInteger::of($x->toInteger())
+        $result = BigInteger::of($x->toInteger())
             ->minus($y->toInteger())
             ->toScale(self::SCALE)
             ->toInt();
 
         return new Satoshi($result);
     }
-    
+
     /**
      * @param Satoshi $x
      * @param Satoshi $divider
      * @param int $roundingMode
+     *
      * @return Satoshi
      */
     public static function divide(Satoshi $x, Satoshi $divider, int $roundingMode = RoundingMode::DOWN): Satoshi
     {
-        $result =  BigRational::of($x->toFloat())
+        $result = BigRational::of($x->toFloat())
             ->dividedBy($divider->toFloat())
             ->toScale(self::SCALE, $roundingMode)
             ->getUnscaledValue()
-            ->toInt()
-        ;
+            ->toInt();
 
         return new Satoshi($result);
     }
@@ -83,12 +86,13 @@ class SatoshiMath extends SatoshiConverter
     /**
      * @param Satoshi $x
      * @param Satoshi $y
+     *
      * @return Satoshi
      * @internal in new release will be renamed to 'multiple'
      */
     public static function pow(Satoshi $x, Satoshi $y): Satoshi
     {
-        $result =  BigInteger::of($x->toInteger())
+        $result = BigInteger::of($x->toInteger())
             ->multipliedBy($y->toInteger())
             ->toScale(self::SCALE)
             ->toInt();
@@ -99,6 +103,7 @@ class SatoshiMath extends SatoshiConverter
     /**
      * @param Satoshi $x
      * @param Satoshi $y
+     *
      * @return Satoshi
      */
     public static function multiple(Satoshi $x, Satoshi $y): Satoshi
