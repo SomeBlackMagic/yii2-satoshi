@@ -42,6 +42,6 @@ class Satoshi
      */
     public function __toString(): string
     {
-        return number_format($this->toFloat(), 8, '.', '');
+        return number_format(floatval($this->toFloat()), 8, '.', '');
     }
 }
